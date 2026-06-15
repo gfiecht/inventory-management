@@ -1,24 +1,28 @@
 <template>
-  <div class="profile-menu">
+  <div class="profile-menu" :class="{ 'profile-menu--collapsed': effectiveCollapsed }">
     <button
       class="profile-button"
+      :class="{ 'profile-button--collapsed': effectiveCollapsed }"
       @click="toggleDropdown"
       @blur="handleBlur"
+      :title="effectiveCollapsed ? currentUser.name : undefined"
     >
       <div class="avatar">
         {{ getInitials(currentUser.name) }}
       </div>
-      <span class="profile-name">{{ currentUser.name }}</span>
-      <svg
-        class="chevron"
-        :class="{ 'chevron-open': isDropdownOpen }"
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-      >
-        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+      <template v-if="!effectiveCollapsed">
+        <span class="profile-name">{{ currentUser.name }}</span>
+        <svg
+          class="chevron"
+          :class="{ 'chevron-open': isDropdownOpen }"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </template>
     </button>
 
     <div v-if="isDropdownOpen" class="dropdown-menu">
@@ -77,9 +81,11 @@
 import { ref, computed } from 'vue'
 import { useAuth } from '../composables/useAuth'
 import { useI18n } from '../composables/useI18n'
+import { useSidebar } from '../composables/useSidebar'
 
 const { currentUser, logout, getInitials } = useAuth()
 const { t } = useI18n()
+const { effectiveCollapsed } = useSidebar()
 
 const isDropdownOpen = ref(false)
 const emit = defineEmits(['show-profile-details', 'show-tasks'])
@@ -93,7 +99,6 @@ const toggleDropdown = () => {
 }
 
 const handleBlur = () => {
-  // Delay to allow mousedown events on dropdown items to fire first
   setTimeout(() => {
     isDropdownOpen.value = false
   }, 200)
@@ -124,25 +129,32 @@ const handleLogout = () => {
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  padding: 0.5rem 0.875rem;
-  background: white;
+  padding: 0.5rem 0.75rem;
+  background: none;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
+  width: 100%;
 }
 
 .profile-button:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+.profile-button--collapsed {
+  justify-content: center;
+  padding: 0.5rem;
 }
 
 .avatar {
   width: 32px;
   height: 32px;
+  min-width: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -156,11 +168,17 @@ const handleLogout = () => {
   font-size: 0.875rem;
   font-weight: 500;
   color: #0f172a;
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .chevron {
   color: #64748b;
   transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 .chevron-open {
@@ -169,13 +187,14 @@ const handleLogout = () => {
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
+  bottom: calc(100% + 0.5rem);
+  left: 0;
+  right: auto;
   min-width: 280px;
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.1), 0 10px 25px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   overflow: hidden;
 }
@@ -191,8 +210,9 @@ const handleLogout = () => {
 .avatar-large {
   width: 48px;
   height: 48px;
+  min-width: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -269,7 +289,7 @@ const handleLogout = () => {
 
 .task-badge {
   margin-left: auto;
-  background: #2563eb;
+  background: #6366f1;
   color: white;
   font-size: 0.75rem;
   font-weight: 600;

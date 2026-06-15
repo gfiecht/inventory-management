@@ -1,9 +1,11 @@
 <template>
-  <div class="language-switcher">
+  <div class="language-switcher" :class="{ 'language-switcher--collapsed': effectiveCollapsed }">
     <button
       class="language-button"
+      :class="{ 'language-button--collapsed': effectiveCollapsed }"
       @click="toggleDropdown"
       @blur="handleBlur"
+      :title="effectiveCollapsed ? localeName : undefined"
     >
       <svg
         width="20"
@@ -17,17 +19,19 @@
         <path d="M10 3C10 3 7.5 5.5 7.5 10C7.5 14.5 10 17 10 17" stroke="currentColor" stroke-width="1.5"/>
         <path d="M10 3C10 3 12.5 5.5 12.5 10C12.5 14.5 10 17 10 17" stroke="currentColor" stroke-width="1.5"/>
       </svg>
-      <span class="language-label">{{ localeName }}</span>
-      <svg
-        class="chevron"
-        :class="{ 'chevron-open': isDropdownOpen }"
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-      >
-        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+      <template v-if="!effectiveCollapsed">
+        <span class="language-label">{{ localeName }}</span>
+        <svg
+          class="chevron"
+          :class="{ 'chevron-open': isDropdownOpen }"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </template>
     </button>
 
     <div v-if="isDropdownOpen" class="dropdown-menu">
@@ -57,8 +61,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from '../composables/useI18n'
+import { useSidebar } from '../composables/useSidebar'
 
 const { currentLocale, setLocale, availableLocales, localeName } = useI18n()
+const { effectiveCollapsed } = useSidebar()
 
 const isDropdownOpen = ref(false)
 
@@ -76,7 +82,6 @@ const toggleDropdown = () => {
 }
 
 const handleBlur = () => {
-  // Delay to allow mousedown events on dropdown items to fire first
   setTimeout(() => {
     isDropdownOpen.value = false
   }, 200)
@@ -97,8 +102,8 @@ const selectLanguage = (locale) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.875rem;
-  background: white;
+  padding: 0.5rem 0.75rem;
+  background: none;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   cursor: pointer;
@@ -106,11 +111,18 @@ const selectLanguage = (locale) => {
   font-family: inherit;
   font-size: 0.875rem;
   color: #334155;
+  width: 100%;
 }
 
 .language-button:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4f46e5;
+}
+
+.language-button--collapsed {
+  justify-content: center;
+  padding: 0.5rem;
 }
 
 .globe-icon {
@@ -119,7 +131,9 @@ const selectLanguage = (locale) => {
 }
 
 .language-label {
+  flex: 1;
   font-weight: 500;
+  text-align: left;
 }
 
 .chevron {
@@ -134,13 +148,14 @@ const selectLanguage = (locale) => {
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
+  bottom: calc(100% + 0.5rem);
+  left: 0;
+  right: auto;
   min-width: 160px;
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.1), 0 10px 25px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   overflow: hidden;
 }
@@ -168,8 +183,8 @@ const selectLanguage = (locale) => {
 }
 
 .dropdown-item.active {
-  background: #eff6ff;
-  color: #2563eb;
+  background: #eef2ff;
+  color: #4f46e5;
 }
 
 .language-name {
@@ -177,7 +192,7 @@ const selectLanguage = (locale) => {
 }
 
 .check-icon {
-  color: #2563eb;
+  color: #6366f1;
   flex-shrink: 0;
 }
 </style>

@@ -35,5 +35,14 @@ recent_transactions = load_json_file('transactions.json')
 # Load purchase orders
 purchase_orders = load_json_file('purchase_orders.json')
 
+# Load submitted restocking orders
+submitted_orders = load_json_file('submitted_orders.json')
+
+def save_submitted_orders(orders):
+    """Persist the submitted restocking orders back to their JSON file"""
+    filepath = os.path.join(DATA_DIR, 'submitted_orders.json')
+    with open(filepath, 'w') as f:
+        json.dump(orders, f, indent=2)
+
 # All data is now loaded from JSON files in the data/ directory
 # This allows for easier maintenance and updates of the sample data

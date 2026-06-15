@@ -1,0 +1,70 @@
+[
+  {
+    "id": "1",
+    "order_number": "RST-2026-0001",
+    "items": [
+      {
+        "sku": "WDG-001",
+        "name": "Industrial Widget Type A",
+        "quantity": 150,
+        "unit_cost": 45.0,
+        "warehouse": "San Francisco"
+      },
+      {
+        "sku": "FLT-405",
+        "name": "Oil Filter Cartridge",
+        "quantity": 150,
+        "unit_cost": 9.75,
+        "warehouse": "San Francisco"
+      },
+      {
+        "sku": "GSK-203",
+        "name": "High-Temperature Gasket",
+        "quantity": 100,
+        "unit_cost": 12.25,
+        "warehouse": "Tokyo"
+      },
+      {
+        "sku": "BRG-102",
+        "name": "Steel Bearing Assembly",
+        "quantity": 2,
+        "unit_cost": 78.5,
+        "warehouse": "London"
+      },
+      {
+        "sku": "PSU-501",
+        "name": "5V 10A Switching Power Supply",
+        "quantity": 2,
+        "unit_cost": 18.99,
+        "warehouse": "San Francisco"
+      },
+      {
+        "sku": "SNR-420",
+        "name": "Temperature Sensor Module",
+        "quantity": 2,
+        "unit_cost": 89.5,
+        "warehouse": "London"
+      },
+      {
+        "sku": "VLV-506",
+        "name": "Pressure Relief Valve",
+        "quantity": 1,
+        "unit_cost": 56.0,
+        "warehouse": "Tokyo"
+      },
+      {
+        "sku": "CTL-330",
+        "name": "Logic Controller Board",
+        "quantity": 1,
+        "unit_cost": 145.0,
+        "warehouse": "Tokyo"
+      }
+    ],
+    "status": "Submitted",
+    "order_date": "2026-06-15T11:42:35",
+    "expected_delivery": "2026-07-03T11:42:35",
+    "lead_time_days": 18,
+    "total_value": 10012.48,
+    "budget": 100000.0
+  }
+]
