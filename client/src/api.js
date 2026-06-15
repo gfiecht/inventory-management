@@ -43,6 +43,16 @@ export const api = {
     return response.data
   },
 
+  async getSubmittedOrders() {
+    const response = await axios.get(`${API_BASE_URL}/submitted-orders`)
+    return response.data
+  },
+
+  async createSubmittedOrder(payload) {
+    const response = await axios.post(`${API_BASE_URL}/submitted-orders`, payload)
+    return response.data
+  },
+
   async getDashboardSummary(filters = {}) {
     const params = new URLSearchParams()
     if (filters.warehouse && filters.warehouse !== 'all') params.append('warehouse', filters.warehouse)
